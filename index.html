@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Don Marco Agency — Tecnología que vende sola para turismo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --bg:#0F1411;
+    --surface:#161C18;
+    --surface-2:#1D2420;
+    --text:#F4F1E8;
+    --muted:#93A09A;
+    --accent:#E8B04B;
+    --border:rgba(244,241,232,0.1);
+    --font-display:'Fraunces', serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    margin:0;
+    overflow-x:hidden;
+  }
+  .font-display{ font-family:var(--font-display); }
+  .font-mono{ font-family:var(--font-mono); }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .glow{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background: radial-gradient(600px circle at var(--gx,50%) var(--gy,30%), rgba(232,176,75,0.08), transparent 60%);
+    transition: background 0.2s ease-out;
+  }
+
+  .blur-line{ filter: blur(3px); }
+
+  .cursor-blink{
+    display:inline-block;
+    width:2px;
+    height:1em;
+    background:var(--accent);
+    margin-left:2px;
+    vertical-align:-0.1em;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    padding: 0.55em 1.15em;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--text);
+    background:transparent;
+    white-space:nowrap;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .pill:hover{ background:var(--text); color:var(--bg); border-color:var(--text); }
+
+  .pill-solid{
+    background:var(--accent);
+    color:#1B1206;
+    border-color:var(--accent);
+    font-weight:500;
+  }
+  .pill-solid:hover{ background:#F2C671; color:#1B1206; border-color:#F2C671; }
+
+  .radar{
+    position:relative;
+    width:120px;
+    height:120px;
+    flex-shrink:0;
+  }
+  .radar-ring{
+    position:absolute;
+    inset:0;
+    border-radius:999px;
+    border:1px solid var(--accent);
+    opacity:0;
+    animation: radar-pulse 3s ease-out infinite;
+  }
+  .radar-ring:nth-child(2){ animation-delay:1s; }
+  .radar-ring:nth-child(3){ animation-delay:2s; }
+  .radar-dot{
+    position:absolute;
+    top:50%; left:50%;
+    width:8px; height:8px;
+    background:var(--accent);
+    border-radius:999px;
+    transform:translate(-50%,-50%);
+  }
+  @keyframes radar-pulse{
+    0%{ transform:scale(0.3); opacity:0.9; }
+    100%{ transform:scale(1); opacity:0; }
+  }
+
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation: marquee 28s linear infinite;
+  }
+  @keyframes marquee{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .radar-ring, .marquee-track, .cursor-blink{ animation:none !important; }
+    .reveal{ transition:none; opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow" id="glow"></div>
+
+<!-- BOTTOM FIXED NAV -->
+<div class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 card px-3 py-2 flex items-center gap-3 backdrop-blur">
+  <div class="flex items-center gap-2">
+    <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="16" cy="16" r="14.5" stroke="#E8B04B" stroke-width="1.3" opacity="0.35"/>
+    <circle cx="16" cy="16" r="9.5" stroke="#E8B04B" stroke-width="1.3" opacity="0.6"/>
+    <circle cx="16" cy="16" r="3" fill="#E8B04B"/>
+  </svg>
+    <span class="font-display text-[14px] tracking-tight">Don&nbsp;Marco</span>
+  </div>
+  <a href="https://wa.me/573163855312?text=Hola%20Don%20Marco%2C%20quiero%20saber%20m%C3%A1s" target="_blank" rel="noopener" class="pill pill-solid text-[13px] px-4 py-2">Hablar con Don Marco</a>
+</div>
+
+<!-- NAVBAR -->
+<header class="relative z-10 flex items-center justify-between px-6 sm:px-10 py-6">
+  <div class="flex items-center gap-3">
+    <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="16" cy="16" r="14.5" stroke="#E8B04B" stroke-width="1.3" opacity="0.35"/>
+    <circle cx="16" cy="16" r="9.5" stroke="#E8B04B" stroke-width="1.3" opacity="0.6"/>
+    <circle cx="16" cy="16" r="3" fill="#E8B04B"/>
+  </svg>
+    <span class="font-display text-[20px] sm:text-[22px] tracking-tight">Don&nbsp;Marco&nbsp;Agency</span>
+  </div>
+  <nav class="hidden md:flex items-center gap-8 text-[14px]" style="color:var(--muted)">
+    <a href="#servicios" class="hover:text-[var(--text)] transition-colors">Servicios</a>
+    <a href="#proceso" class="hover:text-[var(--text)] transition-colors">Cómo trabajamos</a>
+    <a href="#planes" class="hover:text-[var(--text)] transition-colors">Planes</a>
+  </nav>
+  <a href="#contacto" class="pill text-[13px] px-4 py-2">Agendar demo</a>
+</header>
+
+<!-- HERO -->
+<section class="relative z-10 px-6 sm:px-10 pt-10 sm:pt-16 pb-20 max-w-4xl">
+  <p class="blur-line font-mono text-[13px] sm:text-[14px] mb-6" style="color:var(--muted)">
+    Para hoteles, glampings, fincas turísticas, operadores turísticos,<br class="hidden sm:block">
+    agencias de viajes, ecoturismo, deportes extremos y transporte turístico
+  </p>
+
+  <div class="flex items-start gap-6 mb-6">
+    <div class="radar mt-1 hidden sm:block" aria-hidden="true">
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-dot"></div>
+    </div>
+    <h1 class="font-display leading-[1.05] text-[36px] sm:text-[52px] md:text-[60px]">
+      Automatiza. Mejora la<br>
+      experiencia. <span style="color:var(--accent)">Vende sola.</span>
+    </h1>
+  </div>
+
+  <p id="typewriter" class="text-[17px] sm:text-[19px] leading-relaxed min-h-[3.4em]" style="color:var(--text)"></p>
+
+  <div class="flex flex-wrap gap-3 mt-8">
+    <a href="#contacto" class="pill pill-solid">Quiero mi diagnóstico gratis</a>
+    <a href="#servicios" class="pill">Ver servicios</a>
+    <a href="#planes" class="pill">Ver planes</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="relative z-10 py-6 border-y" style="border-color:var(--border)">
+  <div class="marquee-track">
+    <span class="marquee-set flex"></span>
+    <span class="marquee-set flex"></span>
+  </div>
+</section>
+
+<!-- DOLOR / SOLUCION -->
+<section class="relative z-10 px-6 sm:px-10 py-24 max-w-5xl mx-auto">
+  <p class="reveal font-mono text-[13px] mb-4" style="color:var(--accent)">EL PROBLEMA</p>
+  <h2 class="reveal font-display text-[28px] sm:text-[38px] leading-[1.15] mb-10 max-w-2xl">
+    Mientras tu equipo duerme, tus clientes preguntan por WhatsApp — y nadie responde.
+  </h2>
+  <div class="grid sm:grid-cols-3 gap-6">
+    <div class="reveal card p-6">
+      <p class="text-[15px] leading-relaxed">Leads que llegan de noche o fin de semana y se van a la competencia por no tener respuesta.</p>
+    </div>
+    <div class="reveal card p-6">
+      <p class="text-[15px] leading-relaxed">Webs que no convierten: sin catálogo claro, sin formulario, sin llamado a la acción real.</p>
+    </div>
+    <div class="reveal card p-6">
+      <p class="text-[15px] leading-relaxed">Seguimiento manual y disperso — cotizaciones que se pierden entre chats y hojas de cálculo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="relative z-10 px-6 sm:px-10 py-24 max-w-5xl mx-auto">
+  <p class="reveal font-mono text-[13px] mb-4" style="color:var(--accent)">LO QUE HACEMOS</p>
+  <h2 class="reveal font-display text-[28px] sm:text-[38px] leading-[1.15] mb-12 max-w-2xl">
+    Un solo equipo, seis piezas que trabajan juntas para vender por ti.
+  </h2>
+  <div class="grid sm:grid-cols-2 gap-px" style="background:var(--border)">
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">01</p>
+      <h3 class="font-display text-[20px] mb-2">Landing pages de alta conversión</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Páginas rápidas, con catálogo y llamado a la acción claro, pensadas para cerrar reservas.</p>
+    </div>
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">02</p>
+      <h3 class="font-display text-[20px] mb-2">Agentes de IA para WhatsApp</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Cotizan, responden preguntas frecuentes y agendan seguimiento — 24/7, sin turnos.</p>
+    </div>
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">03</p>
+      <h3 class="font-display text-[20px] mb-2">Automatizaciones de marketing</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Flujos que capturan, clasifican y nutren leads sin que nadie tenga que hacerlo a mano.</p>
+    </div>
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">04</p>
+      <h3 class="font-display text-[20px] mb-2">Captación y seguimiento de leads</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Cada cotización queda registrada y con seguimiento activo — ninguna se pierde en un chat.</p>
+    </div>
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">05</p>
+      <h3 class="font-display text-[20px] mb-2">Email marketing</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Secuencias que nutren leads fríos y reactivan clientes pasados, sin esfuerzo manual.</p>
+    </div>
+    <div class="reveal p-8" style="background:var(--bg)">
+      <p class="font-mono text-[13px] mb-2" style="color:var(--muted)">06</p>
+      <h3 class="font-display text-[20px] mb-2">Integraciones con CRM</h3>
+      <p class="text-[14px] leading-relaxed" style="color:var(--muted)">Toda la información de tus clientes centralizada, sin hojas de cálculo dispersas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" class="relative z-10 px-6 sm:px-10 py-24 max-w-5xl mx-auto">
+  <p class="reveal font-mono text-[13px] mb-4" style="color:var(--accent)">CÓMO TRABAJAMOS</p>
+  <h2 class="reveal font-display text-[28px] sm:text-[38px] leading-[1.15] mb-12 max-w-2xl">
+    De diagnóstico a piloto vendiendo, en semanas — no meses.
+  </h2>
+  <div class="grid sm:grid-cols-4 gap-8">
+    <div class="reveal">
+      <p class="font-display text-[34px] mb-2" style="color:var(--accent)">01</p>
+      <p class="text-[14px] leading-relaxed">Diagnóstico gratuito de tu web, WhatsApp y presencia digital.</p>
+    </div>
+    <div class="reveal">
+      <p class="font-display text-[34px] mb-2" style="color:var(--accent)">02</p>
+      <p class="text-[14px] leading-relaxed">Diseñamos tu landing y tu agente de IA a la medida de tu negocio.</p>
+    </div>
+    <div class="reveal">
+      <p class="font-display text-[34px] mb-2" style="color:var(--accent)">03</p>
+      <p class="text-[14px] leading-relaxed">Piloto en vivo de 15 días — mides resultados antes de comprometerte.</p>
+    </div>
+    <div class="reveal">
+      <p class="font-display text-[34px] mb-2" style="color:var(--accent)">04</p>
+      <p class="text-[14px] leading-relaxed">Escalamos y automatizamos el seguimiento comercial completo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section id="planes" class="relative z-10 px-6 sm:px-10 py-24 max-w-5xl mx-auto">
+  <p class="reveal font-mono text-[13px] mb-4" style="color:var(--accent)">PLANES</p>
+  <h2 class="reveal font-display text-[28px] sm:text-[38px] leading-[1.15] mb-12 max-w-2xl">
+    Empieza sin riesgo, escala cuando veas resultados.
+  </h2>
+  <div class="grid sm:grid-cols-2 gap-6">
+    <div class="reveal card p-8">
+      <h3 class="font-display text-[22px] mb-2">Piloto de 15 días</h3>
+      <p class="text-[14px] mb-6" style="color:var(--muted)">Diagnóstico + demo funcional de tu agente de IA, personalizada con tu marca.</p>
+      <p class="font-display text-[30px] mb-6">Gratis</p>
+      <a href="#contacto" class="pill pill-solid w-full">Reservar mi piloto</a>
+    </div>
+    <div class="reveal card p-8" style="border-color:var(--accent)">
+      <h3 class="font-display text-[22px] mb-2">Plan mensual</h3>
+      <p class="text-[14px] mb-6" style="color:var(--muted)">Landing + agente de IA + automatizaciones + soporte continuo.</p>
+      <p class="font-display text-[30px] mb-6">Desde $XXX<span class="text-[14px] font-body" style="color:var(--muted)"> /mes</span></p>
+      <a href="#contacto" class="pill w-full">Agendar llamada</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contacto" class="relative z-10 px-6 sm:px-10 py-28 text-center">
+  <p class="reveal font-mono text-[13px] mb-4" style="color:var(--accent)">EMPECEMOS</p>
+  <h2 class="reveal font-display text-[32px] sm:text-[46px] leading-[1.1] max-w-2xl mx-auto mb-8">
+    ¿Cuántas reservas está perdiendo tu negocio esta semana?
+  </h2>
+  <a href="https://wa.me/573163855312?text=Hola%20Don%20Marco%2C%20quiero%20saber%20m%C3%A1s" target="_blank" rel="noopener" class="pill pill-solid text-[15px] px-6 py-3">Hablar con Don Marco</a>
+</section>
+
+<footer class="relative z-10 flex flex-col sm:flex-row justify-between gap-2 px-6 sm:px-10 py-8 text-[13px] border-t" style="border-color:var(--border); color:var(--muted)">
+  <span>Don Marco Agency</span>
+  <span>Colombia · Turismo &amp; Tecnología</span>
+</footer>
+
+<script>
+  // ambient glow follows cursor
+  const glow = document.getElementById('glow');
+  window.addEventListener('mousemove', (e) => {
+    glow.style.setProperty('--gx', e.clientX + 'px');
+    glow.style.setProperty('--gy', e.clientY + 'px');
+  });
+
+  // marquee content
+  const verticals = ['Hoteles','Glampings','Fincas turísticas','Operadores turísticos','Agencias de viajes','Ecoturismo','Deportes extremos','Transporte turístico'];
+  document.querySelectorAll('.marquee-set').forEach(set => {
+    set.innerHTML = verticals.map(v =>
+      `<span class="font-mono text-[13px] sm:text-[14px] px-6 whitespace-nowrap" style="color:var(--muted)">${v}</span><span style="color:var(--accent)">·</span>`
+    ).join('');
+  });
+
+  // typewriter
+  const text = "Diseñamos webs, agentes de IA y automatizaciones que capturan, responden y venden — mientras tú atiendes a tus huéspedes.";
+  const el = document.getElementById('typewriter');
+  let i = 0;
+  function type(){
+    if(i <= text.length){
+      el.innerHTML = text.slice(0,i) + '<span class="cursor-blink"></span>';
+      i++;
+      setTimeout(type, 22);
+    } else {
+      el.innerHTML = text;
+    }
+  }
+  setTimeout(type, 500);
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Despliega en cada push a main
+  push:
+    branches: [main]
+  # Permite lanzar el deploy manualmente desde la pestaña Actions
+  workflow_dispatch:
+
+# Permisos que necesita el deploy oficial de Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un solo deploy a la vez; cancela los antiguos en curso
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Sitio estático: se publica la raíz del repo tal cual
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
